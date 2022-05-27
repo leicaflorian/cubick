@@ -3,6 +3,7 @@
 const colors = ["#B90000", "#009B48", "#FF5900", "#0045AD", "#FFD500", "white"];
 const container = document.querySelector(".cube-container-flat");
 const container3d = document.querySelector(".cube");
+let activeCoords;
 
 const facesMatrix = [
   [
@@ -128,9 +129,20 @@ function moveX(direction, rowIndex) {
  * @param {"up"|"down"} direction
  * @param {0|1|2} colIndex
  */
-function moveY(direction, colIndex) {
-  const facesToSlide = [4, 0, 5, 2];
-  const faceToRotate = colIndex === 0 ? 3 : 1;
+function moveY(direction, colIndex, activeFaceIndex) {
+  const facesToSlide = [0, 2].includes(activeFaceIndex)
+    ? [4, 0, 5, 2]
+    : [4, 1, 5, 3];
+  const facesMap = [
+    [3, 1], // on face 0
+    [0, 2], // on face 1
+    [1, 3], // on face 2
+    [2, 0], // on face 3
+    [3, 1], // on face 4
+    [0, 2], // on face 5
+  ];
+
+  const faceToRotate = colIndex === 0 ? facesMap[activeFaceIndex][0] : facesMap[activeFaceIndex][1];
 
   // validate given attributes
   if (
@@ -174,7 +186,7 @@ function moveY(direction, colIndex) {
 
   // Calculate new top face content
   const newFaceToRotate = currentFaceToRotate.map((row, i) => {
-    if (direction === "left") {
+    if (direction === "down") {
       return [
         currentFaceToRotate[0][2 - i],
         currentFaceToRotate[1][2 - i],
@@ -209,22 +221,6 @@ function moveY(direction, colIndex) {
   renderCube();
 }
 
-function getLeftIndex(currentFace) {
-  return currentFace === 0 ? 3 : currentFace - 1;
-}
-
-function getRightIndex(currentFace) {
-  return currentFace === 3 ? 0 : currentFace + 1;
-}
-
-function getLeftFace(currentFace) {
-  return facesMatrix[getLeftIndex(currentFace)];
-}
-
-function getRightFace(currentFace) {
-  return facesMatrix[getRightIndex(currentFace)];
-}
-
 function renderContainer(container) {
   // clear container
   container.innerHTML = "";
@@ -254,6 +250,16 @@ function renderContainer(container) {
         const squareContainer = document.createElement("div");
         squareContainer.classList.add("square");
         squareContainer.style.backgroundColor = colors[color];
+        squareContainer.dataset.coords = `${faceIndex},${rowIndex},${squareIndex}`;
+        squareContainer.innerHTML = color
+        // squareContainer.innerHTML = squareIndex
+        // squareContainer.innerHTML = faceIndex;
+
+        if (squareContainer.dataset.coords === activeCoords) {
+          squareContainer.classList.add("active");
+        }
+
+        squareContainer.addEventListener("click", onSquareClick);
 
         rowContainer.appendChild(squareContainer);
       });
@@ -263,6 +269,31 @@ function renderContainer(container) {
 
     container.appendChild(faceContainer);
   });
+}
+
+/**
+ * @this {HTMLElement}
+ */
+function onSquareClick() {
+  const activeSquares = document.querySelectorAll(
+    `[data-coords="${activeCoords}"]`
+  );
+  const mustAdd = !this.classList.contains("active");
+
+  activeCoords = undefined;
+  activeSquares.forEach((square) => square.classList.remove("active"));
+
+  if (mustAdd) {
+    activeCoords = this.dataset.coords;
+
+    const targetSquares = document.querySelectorAll(
+      `[data-coords="${activeCoords}"]`
+    );
+
+    targetSquares.forEach((target) => target.classList.add("active"));
+  }
+
+  console.log(activeCoords);
 }
 
 function renderCube() {
@@ -275,5 +306,43 @@ function renderCube() {
   renderContainer(container);
   renderContainer(container3d);
 }
+
+/**
+ * @param {KeyboardEvent} e
+ */
+window.addEventListener("keydown", (e) => {
+  const key = e.key;
+  const keyMap = {
+    arrowUp: "ArrowUp",
+    arrowDown: "ArrowDown",
+    arrowLeft: "ArrowLeft",
+    arrowRight: "ArrowRight",
+  };
+
+  if (Object.values(keyMap).includes(key)) {
+    if (!activeCoords) {
+      return;
+    }
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const activeFace = +activeCoords.split(",")[0];
+
+    if (key === keyMap.arrowUp || key === keyMap.arrowDown) {
+      const activeCol = activeCoords.split(",")[2];
+
+      moveY(key === keyMap.arrowUp ? "up" : "down", +activeCol, activeFace);
+    } else {
+      const activeRow = activeCoords.split(",")[1];
+
+      moveX(
+        key === keyMap.arrowLeft ? "left" : "right",
+        +activeRow,
+        activeFace
+      );
+    }
+  }
+});
 
 renderCube();
