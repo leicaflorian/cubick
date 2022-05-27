@@ -1,0 +1,19 @@
+{
+  "name": "cubick",
+  "version": "1.0.0",
+  "description": "Simple proof of concept on how to create a rubick cube in vanilla js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leicaflorian/cubick.git"
+  },
+  "author": "Leica Florian Robert",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/leicaflorian/cubick/issues"
+  },
+  "homepage": "https://github.com/leicaflorian/cubick#readme"
+}
