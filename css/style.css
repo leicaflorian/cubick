@@ -1,0 +1,106 @@
+:root {
+  --square-size: 50px;
+}
+* {
+  box-sizing: border-box;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.cube-container-flat,
+.cube {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding-top: calc(var(--square-size) * 3);
+  padding-bottom: calc(var(--square-size) * 3);
+  transform-style: preserve-3d;
+}
+
+.cube-container-flat .face,
+.cube .face {
+  display: flex;
+  flex-direction: column;
+}
+
+.cube-container-flat .face.top {
+  position: absolute;
+  top: 0;
+  left: calc(var(--square-size) * 3);
+}
+.cube-container-flat .face.bottom {
+  position: absolute;
+  bottom: 0;
+  left: calc(var(--square-size) * 3);
+}
+
+.cube-container-flat .face .row,
+.cube .face .row {
+  display: flex;
+}
+
+.cube-container-flat .square,
+.cube .square {
+  width: var(--square-size);
+  height: var(--square-size);
+  border: 1px solid rgb(33, 32, 32);
+}
+
+.cube-3d-scene {
+  perspective: calc(var(--square-size) * 9);
+  justify-content: center;
+  background-color: rgb(60, 58, 58);
+  margin-bottom: 10vh;
+}
+
+.cube {
+  --translate-z: calc(var(--square-size) * 1.5);
+
+  padding: 0;
+  min-width: calc(var(--square-size) * 6);
+  min-height: calc(var(--square-size) * 6);
+  transform: translateZ(-100px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateZ(calc(0px - var(--translate-z))) rotate3d(1, 1.4, -0.3, -62deg);
+}
+
+.cube .face {
+  position: absolute;
+  /* opacity: 0.5; */
+}
+
+.cube .face[data-index="0"] {
+  transform: rotateY(0deg) translateZ(var(--translate-z));
+}
+
+/* Right */
+.cube .face[data-index="1"] {
+  transform: rotateY(90deg) translateZ(var(--translate-z));
+}
+
+/* Back */
+.cube .face[data-index="2"] {
+  transform: rotateY(180deg) translateZ(var(--translate-z));
+}
+
+/* Left */
+.cube .face[data-index="3"] {
+  transform: rotateY(-90deg) translateZ(var(--translate-z));
+}
+
+/* Top */
+.cube .face[data-index="4"] {
+  transform: rotateX(90deg) translateZ(var(--translate-z));
+}
+
+/* Bottom */
+.cube .face[data-index="5"] {
+  transform: rotateX(-90deg) translateZ(var(--translate-z));
+}
