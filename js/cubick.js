@@ -250,7 +250,7 @@ function onMouseDown(e) {
       .getPropertyValue("--rotateDeg")
       .replace("deg", ""),
   };
-
+ 
   console.log(e);
 }
 
@@ -261,7 +261,7 @@ function onMouseUp(e) {
 function onMouseMove(e) {
   if (mouseDown) {
     e.preventDefault();
-    
+
     const delta = {
       x: (e.clientX || e.touches[0].clientX) - initialMousePosition.x,
       y: (e.clientY || e.touches[0].clientY) - initialMousePosition.y,
