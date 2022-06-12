@@ -294,7 +294,7 @@ container3dScene.addEventListener("mousedown", (e) => {
 
 container3dScene.addEventListener("mouseup", (e) => {
   mouseDown = false;
-});
+}); 
 
 container3dScene.addEventListener("mousemove", (e) => {
   if (mouseDown) {
