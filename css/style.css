@@ -60,6 +60,13 @@ body {
   height: var(--square-size);
   border: 1px solid rgb(33, 32, 32);
   transition: box-shadow 0.2s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cube .square span {
+  opacity: 0.2;
 }
 
 .cube-container-flat .square.active,
@@ -92,10 +99,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  transform: translateZ(calc(0px - var(--translate-z))) 
-  rotateX(var(--rotateY))
-  rotateY(var(--rotateX))
-  rotateZ(var(--rotateZ));
+  transform: translateZ(calc(0px - var(--translate-z))) rotateX(var(--rotateY))
+    rotateY(var(--rotateX)) rotateZ(var(--rotateZ));
 }
 
 .cube .face {

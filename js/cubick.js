@@ -170,7 +170,7 @@ function renderContainer(container) {
         squareContainer.classList.add("square");
         squareContainer.style.backgroundColor = colors[color];
         squareContainer.dataset.coords = `${faceIndex},${rowIndex},${squareIndex}`;
-        squareContainer.innerHTML = color;
+        squareContainer.innerHTML = `<span>${color}</span>`;
         // squareContainer.innerHTML = squareIndex
         // squareContainer.innerHTML = faceIndex;
 
