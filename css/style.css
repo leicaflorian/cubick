@@ -35,6 +35,7 @@ body {
 .cube .face {
   display: flex;
   flex-direction: column;
+  user-select: none;
 }
 
 .cube-container-flat .face.top {
@@ -80,6 +81,9 @@ body {
 
 .cube {
   --translate-z: calc(var(--square-size) * 1.5);
+  --rotateX: -52deg;
+  --rotateY: -27deg;
+  --rotateZ: 0deg;
 
   padding: 0;
   min-width: calc(var(--square-size) * 6);
@@ -88,8 +92,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  transform: translateZ(calc(0px - var(--translate-z)))
-    rotate3d(1, 1.4, -0.3, -62deg);
+  transform: translateZ(calc(0px - var(--translate-z))) 
+  rotateX(var(--rotateY))
+  rotateY(var(--rotateX))
+  rotateZ(var(--rotateZ));
 }
 
 .cube .face {

@@ -1,6 +1,10 @@
 const colors = ["#B90000", "#009B48", "#FF5900", "#0045AD", "#FFD500", "white"];
 const container = document.querySelector(".cube-container-flat");
+/**
+ * @type {HTMLElement}
+ */
 const container3d = document.querySelector(".cube");
+const container3dScene = document.querySelector(".cube-3d-scene");
 let activeCoords;
 
 const facesMatrix = [
@@ -257,6 +261,68 @@ window.addEventListener("keydown", (e) => {
         activeFace
       );
     }
+  }
+});
+
+let mouseDown = false;
+let initialMousePosition = { x: 0, y: 0 };
+let initialCssProps = {
+  x: 0,
+  y: 0,
+  z: 0,
+  deg: 0,
+};
+
+container3dScene.addEventListener("mousedown", (e) => {
+  mouseDown = true;
+  initialMousePosition = { x: e.clientX, y: e.clientY };
+  initialCssProps = {
+    x: +getComputedStyle(container3d)
+      .getPropertyValue("--rotateX")
+      .replace("deg", ""),
+    y: +getComputedStyle(container3d)
+      .getPropertyValue("--rotateY")
+      .replace("deg", ""),
+    z: +getComputedStyle(container3d).getPropertyValue("--rotateZ"),
+    deg: +getComputedStyle(container3d)
+      .getPropertyValue("--rotateDeg")
+      .replace("deg", ""),
+  };
+
+  // console.log(initialMousePosition, initialCssProps);
+});
+
+container3dScene.addEventListener("mouseup", (e) => {
+  mouseDown = false;
+});
+
+container3dScene.addEventListener("mousemove", (e) => {
+  if (mouseDown) {
+    const delta = {
+      x: e.clientX - initialMousePosition.x,
+      y: e.clientY - initialMousePosition.y,
+      z: 0,
+      deg: 0,
+    };
+
+    const finalCssProps = {
+      x:
+        delta.x >= 0
+          ? initialCssProps.x + delta.x
+          : initialCssProps.x - -delta.x,
+      y: initialCssProps.y - delta.y,
+    };
+
+    if (finalCssProps.x > 360 || finalCssProps.x < -360) {
+      finalCssProps.x = 0;
+    }
+
+    if (finalCssProps.y > 360 || finalCssProps.y < -360) {
+      finalCssProps.y = 0;
+    }
+
+    container3d.style.setProperty("--rotateX", finalCssProps.x + "deg");
+    container3d.style.setProperty("--rotateY", finalCssProps.y + "deg");
   }
 });
 
